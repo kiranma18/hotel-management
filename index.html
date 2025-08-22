@@ -1,31 +1,248 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hotel Management</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; text-align: center; }
-    header { background: #4CAF50; color: white; padding: 20px; }
-    section { padding: 20px; }
-    footer { background: #222; color: white; padding: 10px; }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Azure Grand Hotel — Booking</title>
+  <meta name="description" content="Azure Grand Hotel - Book rooms, check-in/out, view location. College project demo." />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Welcome to Hotel Management System</h1>
+  <!-- Optional access gate -->
+  <div id="gate" class="gate-hidden">
+    <div class="gate-panel">
+      <h3>Enter Access Code</h3>
+      <p class="muted">Optional: use a code for demo privacy (ask your coordinator for the code).</p>
+      <input id="gate-code" placeholder="Access code (e.g. AG2025)" />
+      <div class="gate-actions">
+        <button id="gate-enter" class="btn primary">Enter</button>
+        <button id="gate-cancel" class="btn ghost">Close</button>
+      </div>
+      <p id="gate-msg" class="muted error" style="display:none">Wrong code — try again.</p>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-grid">
+      <div class="brand">
+        <div class="logo-dot">AG</div>
+        <div>
+          <div class="brand-title">Azure Grand Hotel</div>
+          <div class="brand-sub">Comfort · Class · Convenience</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="#rooms">Rooms</a>
+        <a href="#booking">Booking</a>
+        <a href="#contact">Contact</a>
+        <a href="#location">Location</a>
+      </nav>
+
+      <button id="mobile-menu-btn" class="mobile-menu-btn">☰</button>
+    </div>
+    <div id="mobile-menu" class="mobile-menu" hidden>
+      <a href="#rooms">Rooms</a>
+      <a href="#booking">Booking</a>
+      <a href="#contact">Contact</a>
+      <a href="#location">Location</a>
+    </div>
   </header>
-  <section>
-    <h2>Book Your Room</h2>
-    <form>
-      <input type="text" placeholder="Your Name" required><br><br>
-      <input type="email" placeholder="Email" required><br><br>
-      <input type="date" required><br><br>
-      <button type="submit">Book Now</button>
-    </form>
-  </section>
-  <footer>
-    <p>© 2025 Hotel Management Project</p>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <img class="hero-img" src="https://images.unsplash.com/photo-1554147090-e1221a04a025?q=80&w=1600&auto=format&fit=crop" alt="Hotel lobby">
+      <div class="hero-inner container">
+        <div class="hero-left">
+          <div class="badge">4.8 ★ • Free Wi-Fi • 24×7 Concierge</div>
+          <h1>Experience boutique luxury in the heart of the city</h1>
+          <p class="muted">Book beautifully designed rooms with premium amenities. Seamless check-in and 24×7 service.</p>
+          <div class="cta-row">
+            <a class="btn primary large" href="#booking">Book Now</a>
+            <a class="btn ghost large" href="#rooms">Explore Rooms</a>
+          </div>
+        </div>
+
+        <div class="hero-right card">
+          <h3>Quick Availability</h3>
+          <form id="quick-check" class="quick-form">
+            <input type="date" id="q-checkin" required />
+            <input type="date" id="q-checkout" required />
+            <select id="q-room">
+              <option>Deluxe</option>
+              <option>Executive Suite</option>
+              <option>Standard</option>
+              <option>Suite</option>
+            </select>
+            <button class="btn primary" type="button" id="q-check-btn">Check</button>
+            <div id="q-result" class="muted" style="margin-top:8px"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROOMS -->
+    <section id="rooms" class="container section">
+      <h2>Rooms & Suites</h2>
+      <p class="muted">Choose from thoughtfully designed rooms for business or leisure.</p>
+
+      <div class="rooms-grid">
+        <article class="room-card card">
+          <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop" alt="Standard Room">
+          <div class="room-body">
+            <h3>Standard Room</h3>
+            <p class="muted">Comfortable single/double with modern amenities.</p>
+            <div class="room-meta">
+              <div class="price">₹2,499 <span class="per-night">/ night</span></div>
+              <button class="btn primary small book-btn" data-room="Standard Room">Book</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="room-card card">
+          <img src="https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?q=80&w=1200&auto=format&fit=crop" alt="Deluxe Room">
+          <div class="room-body">
+            <h3>Deluxe Room</h3>
+            <p class="muted">City view, king bed, and premium services.</p>
+            <div class="room-meta">
+              <div class="price">₹3,899 <span class="per-night">/ night</span></div>
+              <button class="btn primary small book-btn" data-room="Deluxe Room">Book</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="room-card card">
+          <img src="https://images.unsplash.com/photo-1505691723518-36a5ac3b2d87?q=80&w=1200&auto=format&fit=crop" alt="Executive Suite">
+          <div class="room-body">
+            <h3>Executive Suite</h3>
+            <p class="muted">Spacious suite with living area and premium amenities.</p>
+            <div class="room-meta">
+              <div class="price">₹6,299 <span class="per-night">/ night</span></div>
+              <button class="btn primary small book-btn" data-room="Executive Suite">Book</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="room-card card">
+          <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?q=80&w=1200&auto=format&fit=crop" alt="Deluxe Twin">
+          <div class="room-body">
+            <h3>Deluxe Twin</h3>
+            <p class="muted">Two comfortable beds, great for friends or family.</p>
+            <div class="room-meta">
+              <div class="price">₹4,199 <span class="per-night">/ night</span></div>
+              <button class="btn primary small book-btn" data-room="Deluxe Twin">Book</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="booking" class="container section">
+      <h2>Book Your Stay</h2>
+      <p class="muted">Fill the form below. For demo, bookings will be sent to your Google Sheet (optional).</p>
+
+      <div class="grid-2">
+        <div class="card pad">
+          <form id="bookingForm" class="form">
+            <div class="form-row">
+              <div><label>Name</label><input name="name" required /></div>
+              <div><label>Email</label><input name="email" type="email" required /></div>
+            </div>
+
+            <div class="form-row">
+              <div><label>Phone</label><input name="phone" required /></div>
+              <div><label>Guests</label><input name="guests" type="number" min="1" value="1" required /></div>
+            </div>
+
+            <div class="form-row">
+              <div><label>Check-in</label><input name="checkIn" type="date" required /></div>
+              <div><label>Check-out</label><input name="checkOut" type="date" required /></div>
+            </div>
+
+            <div class="form-row">
+              <div><label>Room Type</label>
+                <select name="roomType">
+                  <option>Standard Room</option>
+                  <option>Deluxe Room</option>
+                  <option>Deluxe Twin</option>
+                  <option>Executive Suite</option>
+                </select>
+              </div>
+              <div><label>Special Requests</label><input name="requests" placeholder="e.g., late check-in" /></div>
+            </div>
+
+            <div style="margin-top:12px">
+              <button type="submit" class="btn primary large" id="book-submit">Confirm Booking</button>
+              <div id="form-msg" class="muted" style="margin-top:10px"></div>
+            </div>
+          </form>
+        </div>
+
+        <aside class="card pad">
+          <h4>Booking Summary</h4>
+          <div id="summary">
+            <p class="muted">No booking selected yet — fill the form or click any "Book" button on a room card.</p>
+          </div>
+
+          <hr style="margin:12px 0" />
+          <h4>Amenities</h4>
+          <ul class="muted">
+            <li>High-speed Wi-Fi</li>
+            <li>24×7 Front Desk & Concierge</li>
+            <li>Complimentary breakfast</li>
+            <li>Airport transfer on request</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <!-- LOCATION / MAP -->
+    <section id="location" class="container section">
+      <h2>Find Us</h2>
+      <div class="map-card card">
+        <iframe title="Hotel Location" width="100%" height="350" style="border:0"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3890.279692024589!2d73.8567!3d18.5204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1sPune!2sMaharashtra!5e0!3m2!1sen!2sin!4v1689069069069" loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="container section">
+      <h2>Contact Us</h2>
+      <div class="grid-2">
+        <div class="card pad">
+          <h3>Reservations</h3>
+          <p class="muted">reservations@azuregrand.in</p>
+          <p class="muted">+91 98765 43210</p>
+        </div>
+        <div class="card pad">
+          <h3>Quick Info</h3>
+          <p class="muted">Check-in: 1:00 PM • Check-out: 11:00 AM</p>
+          <p class="muted">Address: MG Road, Pune, Maharashtra</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>© <span id="year"></span> Azure Grand Hotel • College Project</div>
+      <div class="muted small">Built for demo — replace images & copy for production.</div>
+    </div>
   </footer>
+
+  <div id="success-modal" class="modal-hidden">
+    <div class="modal-card">
+      <h3>Booking Submitted</h3>
+      <p id="modal-text">Thank you! Your booking has been submitted.</p>
+      <button class="btn primary" id="modal-close">Close</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
